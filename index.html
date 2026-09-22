@@ -424,9 +424,7 @@
   }
 
   /* Groups */
-  .group-toggle {
-    width: 100%;
-    text-align: left;
+  .phys-ed-group {
     background: var(--paper-alt);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -435,27 +433,7 @@
     font-weight: 700;
     font-size: 15px;
     color: var(--ink);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
   }
-  .group-toggle .chev { transition: transform 0.2s ease; color: var(--ink-soft); }
-  .group-toggle.open .chev { transform: rotate(180deg); }
-  .group-body {
-    display: none;
-    padding: 14px 4px 4px;
-  }
-  .group-body.open { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .group-col h4 {
-    font-family: var(--font-display);
-    font-size: 13px;
-    margin: 0 0 8px;
-    color: var(--coral-dark);
-  }
-  .group-col ul { margin: 0; padding: 0; list-style: none; }
-  .group-col li { font-size: 13.5px; padding: 3px 0; color: var(--ink-soft); }
-  .my-name { color: var(--ink); font-weight: 600; }
 
   /* Contacts */
   .contacts {
@@ -526,11 +504,7 @@
   <div id="daySchedule"></div>
 
   <h2>Kroppsøving denne uken</h2>
-  <button class="group-toggle" id="groupToggle">
-    <span></span>
-    <span class="chev">▾</span>
-  </button>
-  <div class="group-body" id="groupBody"></div>
+  <div class="phys-ed-group" id="physEdGroup"></div>
 
   <h2>Kontakt</h2>
   <div class="contacts" id="contactsSection"></div>
@@ -558,12 +532,6 @@ var db = getFirestore(firebaseApp);
   var SHARED = {
     school: 'Teie skole',
     grade: '3. trinn',
-    physEd: {
-      groups: [
-        { name: 'Gruppe taco', members: ['Edward Johan','Elisabeth','Kaisa','Trygve','Julie','Eline','Ulrik','Hedvig','Mahamed','Olav Alexander','Victoria','Esther','Celine','Aron','Ingrid','Mikkel','Mie','Ada','Sebastian','Tobias'] },
-        { name: 'Gruppe pizza', members: ['Ulrik','Håkon','Ebbe','Mille Marie','Anita','Ava','Malin','Marie','Selma','Lavrans','Hedda','Gustav','Nils','Mikkel','Jesper','Edvin','Theodor','Iben','Emilie','Wilma','Holy','Hjalmar','Tristan','Agnes','Hedvig Eline','Isak','Olav V','Ask','Hussein','Amalie','David','Oscar','Leandra','Jenny','Sylvester','Emil','June','Leon','Emilian','Åse'] }
-      ]
-    },
     contacts: [
       { role: '3A – Anne', email: 'anne.kari.augustsson@faerder.kommune.no' },
       { role: '3B – Magnus', email: 'magnus.senneset.rindaroy@faerder.kommune.no' },
@@ -777,32 +745,7 @@ var db = getFirestore(firebaseApp);
   }
 
   function updateFeaturedGroup(name) {
-    document.querySelector('#groupToggle span').textContent = name;
-  }
-
-  function renderPhysEd() {
-    var toggle = document.getElementById('groupToggle');
-    var body = document.getElementById('groupBody');
-    body.innerHTML = '';
-    SHARED.physEd.groups.forEach(function(group) {
-      var col = document.createElement('div');
-      col.className = 'group-col';
-      var h4 = document.createElement('h4');
-      h4.textContent = group.name;
-      col.appendChild(h4);
-      var ul = document.createElement('ul');
-      group.members.forEach(function(name) {
-        var li = document.createElement('li');
-        li.textContent = name;
-        ul.appendChild(li);
-      });
-      col.appendChild(ul);
-      body.appendChild(col);
-    });
-    toggle.addEventListener('click', function() {
-      toggle.classList.toggle('open');
-      body.classList.toggle('open');
-    });
+    document.getElementById('physEdGroup').textContent = name;
   }
 
   function renderContacts() {
@@ -993,7 +936,6 @@ var db = getFirestore(firebaseApp);
   }
 
   // ---- Init ----
-  renderPhysEd();
   renderContacts();
 
   if (WEEKS.length <= 1) {
