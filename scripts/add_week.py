@@ -6,6 +6,9 @@ ferdig JS-objekt, klart til å limes inn i WEEKS-arrayet i index.html.
 Bruk:
     python3 scripts/add_week.py "Ukeplan uke 40.pdf"
 
+Skriver output både til terminalen og til en .md-fil oppkalt etter
+PDF-en, i scripts/output/ (f.eks. scripts/output/Ukeplan uke 40.md).
+
 Krever: pdfplumber (installer med: pip3 install pdfplumber)
 
 Hva scriptet klarer helt automatisk (høy pålitelighet, bygger på
@@ -26,6 +29,7 @@ Hva du fortsatt må gjøre selv (fritekst som krever en vurdering):
     se bunnen av output.
 """
 import sys
+import os
 import re
 import json
 import datetime
@@ -191,12 +195,37 @@ def js_str(s):
     return json.dumps(s, ensure_ascii=False)
 
 
+class Tee:
+    """Writes to multiple streams at once (terminal + output file)."""
+    def __init__(self, *streams):
+        self.streams = streams
+
+    def write(self, data):
+        for s in self.streams:
+            s.write(data)
+
+    def flush(self):
+        for s in self.streams:
+            s.flush()
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
         sys.exit(1)
 
     path = sys.argv[1]
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(script_dir, 'output')
+    os.makedirs(output_dir, exist_ok=True)
+    base_name = os.path.splitext(os.path.basename(path))[0]
+    out_path = os.path.join(output_dir, base_name + '.md')
+
+    real_stdout = sys.stdout
+    out_file = open(out_path, 'w', encoding='utf-8')
+    sys.stdout = Tee(real_stdout, out_file)
+
     with pdfplumber.open(path) as pdf:
         first_page_text = pdf.pages[0].extract_text() or ''
         week_number = extract_week_number(first_page_text)
@@ -207,6 +236,8 @@ def main():
 
     if not week_number:
         print("Fant ikke ukenummer i PDF-en — sjekk at filen er en vanlig Visma-ukeplan.")
+        sys.stdout = real_stdout
+        out_file.close()
         sys.exit(1)
 
     date_range = week_date_range(SCHOOL_YEAR, week_number)
@@ -255,6 +286,10 @@ def main():
 
     print("\n--- Ferdig prompt — lim inn i en vanlig Claude.ai-chat (ikke Claude Code) ---\n")
     print(PROMPT_TEMPLATE.format(week=week_number, homework_raw=homework_raw, info_raw=info_raw))
+
+    sys.stdout = real_stdout
+    out_file.close()
+    print("\nSkrevet til: {}".format(out_path))
 
 
 if __name__ == '__main__':
