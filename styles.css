@@ -433,16 +433,15 @@ h2 {
   padding: 16px 18px;
 }
 .contact-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  display: block;
   padding: 9px 0;
   border-top: 1px solid var(--line);
   font-size: 13.5px;
+  color: var(--coral-dark);
+  text-decoration: none;
+  cursor: pointer;
 }
 .contact-row:first-child { border-top: none; }
-.contact-role { color: var(--ink-soft); flex: none; }
-.contact-row a { color: var(--coral-dark); text-decoration: none; word-break: break-all; text-align: right; }
 
 .absence-note {
   font-size: 13px;

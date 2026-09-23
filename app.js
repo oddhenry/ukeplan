@@ -145,9 +145,7 @@ var db = getFirestore(firebaseApp);
     var contactsEl = document.getElementById('contactsSection');
     var html = '';
     SHARED.contacts.forEach(function(c) {
-      var shortEmail = c.email.split('@')[0] + '@…';
-      html += '<div class="contact-row"><span class="contact-role">' + c.role + '</span>' +
-        '<a href="mailto:' + c.email + '">' + shortEmail + '</a></div>';
+      html += '<a class="contact-row" href="mailto:' + c.email + '">' + c.role + '</a>';
     });
     html += '<p class="absence-note">' + SHARED.absenceNote + '</p>';
     contactsEl.innerHTML = html;
