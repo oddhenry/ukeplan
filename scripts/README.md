@@ -1,47 +1,47 @@
 # Legge til en ny uke
 
-Arbeidsflyt for å oppdatere nettsiden med en ny ukeplan, uten å måtte
-gjennom en full Claude Code-økt hver gang.
+## Arbeidsflyt: kort Claude Code-økt hver uke
 
-## 1. Kjør scriptet
+Ikke klipp-og-lim mellom script, en egen Claude.ai-chat og GitHub lenger.
+Gjør i stedet dette:
+
+1. Start en **kort** Claude Code-økt i dette prosjektet.
+2. Gi meg PDF-en for uken (dra den inn, eller oppgi filbanen), og si noe
+   sånt som:
+
+   > Her er PDF-en for uke 40. Sett sammen uke-objektet og legg det inn
+   > i `WEEKS`-arrayet i `index.html`. Ikke commit eller push.
+
+3. Jeg kjører `scripts/add_week.py`, fyller inn hjemmearbeid og
+   «denne uken»-punktene selv (inkludert hva som bør festes og evt.
+   kalenderdata), og redigerer `index.html` direkte — alt i én
+   sammenhengende handling, ingen manuell sammensetting.
+4. Jeg stopper **før** noe committes. Du sjekker selv (`git diff` eller
+   GitHub Desktop/VS Code) at det ser riktig ut, og pusher når du er
+   fornøyd — via terminal, GitHub Desktop, eller GitHubs nettgrensesnitt.
+
+Dette holder øktene korte og billige: ingen browser-testing eller
+git-operasjoner fra min side, kun datainnlegging — og du beholder full
+kontroll på hva som faktisk publiseres.
+
+## Scriptet i seg selv
 
 ```bash
 pip3 install pdfplumber   # kun første gang
 python3 scripts/add_week.py "Ukeplan uke 40.pdf"
 ```
 
-Scriptet skriver ut:
-- Et nesten ferdig JS-objekt (uketall, år, dato, kroppsøvingsgruppe,
-  «Ukas fokus» og timeplan — disse er pålitelig automatisk uttrukket
-  fra PDF-ens tabellstruktur).
-- Rå tekst for hjemmearbeid og «Denne uken»-punktene, som fortsatt
-  krever en vurdering (hva skal festes, kalenderdata for konkrete
-  hendelser osv.).
-- En ferdig utformet prompt du kan lime rett inn i en **vanlig
-  Claude.ai-chat** (ikke Claude Code) for å få de to siste bitene
-  formatert riktig.
+Kan fortsatt kjøres helt på egen hånd om du vil — det skriver et
+nesten ferdig JS-objekt (uketall, dato, kroppsøvingsgruppe, «Ukas
+fokus» og timeplan er pålitelig automatisk uttrukket) til terminalen
+og til `scripts/output/<pdf-navn>.md`. Hjemmearbeid og «denne
+uken»-punktene er fortsatt rå tekst i output — det er nettopp den
+biten en kort Claude Code-økt (se over) nå gjør for deg i stedet for
+en egen chat.
 
-## 2. Sett sammen det ferdige uke-objektet
-
-Ta JS-objektet scriptet ga deg, fyll inn `homework` og `infoItems` fra
-chat-svaret, og fjern kommentarene.
-
-## 3. Lim inn på GitHub — ingen lokal git nødvendig
-
-1. Gå til [github.com/oddhenry/ukeplan/edit/main/index.html](https://github.com/oddhenry/ukeplan/edit/main/index.html)
-   (åpner filen direkte i GitHubs nettbaserte redigering)
-2. Finn `WEEKS`-arrayet, lim inn det nye uke-objektet som et nytt
-   element (rekkefølgen i arrayet spiller ingen rolle — sortering skjer
-   automatisk basert på `year`/`weekNumber`)
-3. Scroll ned → **Commit changes...** → **Commit directly to the `main` branch**
-
-GitHub Pages bygger automatisk om siden i løpet av 1–2 minutter.
-
-## Når trenger du meg (Claude Code) igjen?
+## Når trenger du en lengre økt med meg?
 
 - Nye funksjoner / design-endringer på selve siden
 - Hvis Visma endrer PDF-oppsettet sitt og scriptet begynner å gi rart
   resultat (si fra, så retter jeg scriptet — som regel et lite fiks)
 - Generelt vedlikehold
-
-Selve den ukentlige data-inntastingen skal ikke lenger kreve meg.
