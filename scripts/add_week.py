@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Ekstraherer en ny ukes data fra en Visma-ukeplan-PDF og skriver ut et
-ferdig JS-objekt, klart til å limes inn i WEEKS-arrayet i index.html.
+ferdig JS-objekt, klart til å limes inn i WEEKS-arrayet i weeks-data.js.
 
 Bruk:
     python3 scripts/add_week.py "Ukeplan uke 40.pdf"

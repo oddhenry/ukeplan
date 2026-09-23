@@ -10,11 +10,11 @@ Gjør i stedet dette:
    sånt som:
 
    > Her er PDF-en for uke 40. Sett sammen uke-objektet og legg det inn
-   > i `WEEKS`-arrayet i `index.html`. Ikke commit eller push.
+   > i `WEEKS`-arrayet i `weeks-data.js`. Ikke commit eller push.
 
 3. Jeg kjører `scripts/add_week.py`, fyller inn hjemmearbeid og
    «denne uken»-punktene selv (inkludert hva som bør festes og evt.
-   kalenderdata), og redigerer `index.html` direkte — alt i én
+   kalenderdata), og redigerer `weeks-data.js` direkte — alt i én
    sammenhengende handling, ingen manuell sammensetting.
 4. Jeg stopper **før** noe committes. Du sjekker selv (`git diff` eller
    GitHub Desktop/VS Code) at det ser riktig ut, og pusher når du er

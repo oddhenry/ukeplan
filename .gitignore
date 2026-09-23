@@ -1,6 +1,7 @@
 .DS_Store
 .claude/
 Screenshots/
+raw pdf/
 *.pdf
 *.png
 *.mov
